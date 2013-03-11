@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>OriGami Editor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Matthias Pfeil">
+
+
+    <!-- Le styles -->
+    <link href="../assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="../assets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css" />
+  </head>
+
+  <body class>
+	  <div class="navbar navbar-inverse navbar-fixed-top" id="navbar">
+      	<div class="navbar-inner">
+        	<div class="container">
+        		 <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	        		 <span class="icon-bar"></span>
+	        		 <span class="icon-bar"></span>
+	        		 <span class="icon-bar"></span>
+	        	</a>
+		        <a class="brand" href="#">OriGami Editor</a>
+		        <div class="nav-collapse collapse">
+			        <ul class="nav">
+				        <li class="dropdown" id="accountmenu">  
+					        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Route<b class="caret"></b></a>  
+					        <ul class="dropdown-menu">  
+						        <li><a href="#myModal" role="button" data-toggle="modal" onclick="document.getElementById('routeID').innerHTML=makeID();">Neu</a></li>
+						        <li><a href="#loadRouteModal" role="button" data-toggle="modal">Laden</a></li>  
+						        <li class="divider"></li>
+						        <li class="disabled" id="startpoint"><a>Startpunkt</a></li>  
+						        <li class="disabled" id="waypoint"><a>Wegpunkt</a></li>
+						        <li class="disabled" id="endpoint"><a>Endpunkt</a></li>  
+						    </ul>  
+						</li>
+						<li><a href="#faqModal" id="faq" role="button" data-toggle="modal">FAQ</a></li>
+						<li><a href="#about" id="about" rel="popover" data-content="&copy; GI@School 2012">Über</a></li>
+						<li class="dropdown" id="gallery">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Basemap<b class="caret"></b></a>  
+					        <ul class="dropdown-menu">  
+						        <div id="basemapMenu" class="basemapMenu">
+							        
+						        </div>
+						    </ul>
+						</li>
+						<!--
+<li>
+							<form class="form-search">
+								<div class="input-append">
+									<input type="text" class="span2 search-query">
+									<button type="submit" class="btn">Search</button>
+								</div>
+							</form>	
+						</li>
+-->
+					</ul>
+				</div>
+			</div>
+		</div>
+    </div>
+
+    <div class="container fill" id="main">
+	    <div id="map" class="claro">
+		    
+	    </div>
+    </div> <!-- /container -->
+    
+    <!-- Modal -->
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    	<div class="modal-header">
+    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    		<h3 id="myModalLabel">Neue Route anlegen</h3>
+    	</div>
+    	<div class="modal-body">
+	    	<p>Bitte merken oder kopieren Sie sich folgende Kombination: <b class="label label-info" id="routeID"></b></br> 
+	    	Darüber können die Schüler die erstellte Route laden.</p>
+	    	<hr>
+	    	<p>Bitte geben Sie hier einen Namen für die Route an:</br>
+	    	<div id="cgRouteName" class="control-group error">
+	    		<div class="controls"> 
+		    		<input class="input-xlarge" type="text" required class="" id="routeName">
+	    		</div>
+	    	</div>
+	    	<hr>
+	    	<p>Falls Sie die RouteID als Mail zugeschickt bekommen möchten, tragen Sie hier die Empfängeradresse ein:</br> 
+	    	<input type="email" id="inputEmail" placeholder="Email" class="input-xlarge">
+	    </div>
+        <div class="modal-footer">
+	    	<button id="cancelRoute" class="btn" data-dismiss="modal" aria-hidden="true">Abbrechen</button>
+	    	<button id="createRoute" class="btn btn-primary" disabled="true" onclick="createRoute('new',document.getElementById('routeName').value,document.getElementById('routeID').innerHTML,document.getElementById('inputEmail').value)">Route anlegen</button>
+        </div>
+	</div>
+	
+	<!-- FAQ Modal -->
+	<div id="faqModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="faqModalLabel" aria-hidden="true">
+    	<div class="modal-header">
+    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    		<h3 id="faqModalLabel">FAQ</h3>
+    	</div>
+    	<div class="modal-body">
+	    	<div class="accordion" id="accordion2">
+		    	<div class="accordion-group">
+			    	<div class="accordion-heading">
+				    	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">Wie lege ich eine neue Route an?</a>
+				    </div>
+				    <div id="collapseOne" class="accordion-body collapse">
+					    <div class="accordion-inner">
+
+						</div>
+					</div>
+				</div>
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">Warum muss ich mir die RouteID merken?</a>
+					</div>
+					<div id="collapseTwo" class="accordion-body collapse">
+						<div class="accordion-inner">
+
+						</div>
+					</div>
+				</div>
+			</div>
+	    </div>
+	</div>
+	
+	<div id="loadRouteModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="loadRouteModalLabel" aria-hidden="true">
+    	<div class="modal-header">
+    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    		<h3 id="loadRouteModalLabel">Route laden</h3>
+    	</div>
+    	<div class="modal-body">
+<!-- 	    	<p>Bitte geben Sie hier die RouteID ein: <input type="text" required id="loadRouteID" maxlength="5" class="span1"></p> -->
+			<div class="control-group">
+				<label class="control-label" for="input01">Bitte geben Sie hier eine gültige RouteID ein:</label>
+				<div class="controls">
+					<input type="text" class="input-xlarge" id="loadRouteID" maxlength="5" name="loadRouteID">
+				</div>
+				<span id="notFound" class="label label-important" style="visibility:hidden;">Zu der von Ihnen eingegebenen RouteID gibt es keine Route!</span>
+			</div>
+	    </div>
+        <div class="modal-footer">
+	    	<button id="cancelLoadRoute" class="btn" data-dismiss="modal" aria-hidden="true">Abbrechen</button>
+	    	<button id="createLoadRoute" class="btn btn-primary" disabled="true" onclick="createRoute('load','',document.getElementById('loadRouteID').value,'')">Route laden</button>
+        </div>
+	</div>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../assets/bootstrap/js/bootstrap.js"></script>
+    <script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/"></script>
+    <script src="js/js.js"></script>
+    <script src="js/menu.js"></script>    
+
+  </body>
+</html>

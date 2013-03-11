@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Smiley Face</title>
+<meta charset="utf-8" />
+<style>
+	canvas {
+		border: none;
+		color: #000000
+	}
+</style>
+<script>
+window.onload = drawSmileyFace;
+
+function drawSmileyFace() {
+var canvas = document.getElementById("smiley");
+	var _half = canvas.width / 2;
+	var _quarter = canvas.width / 4;
+	var _eighth = canvas.width / 8;
+	var _tenth = canvas.width / 10; 
+	var context = canvas.getContext("2d");
+	
+	var eyeWidth = _tenth / 2;
+	var eyeHeight = _tenth * 2;
+
+	// face
+	context.beginPath();
+	context.arc(64, 					// x   x,y is at the center
+				64, 					// y
+				64, 					// arc radius
+				0, 						// starting angle
+				degreesToRadians(360),	// ending angle
+				true);					// counter-clockwise
+	//set background color			
+	var hue = 120;
+	context.fillStyle = "hsl("+hue+", 100%, 50%)";
+	context.fill();
+	context.stroke();
+	
+	//left eye
+	context.save();
+	// translate context
+	context.translate(eyeWidth, eyeHeight);
+	// scale context horizontally
+	context.scale(1, 2);
+	// draw circle which will be stretched into an oval
+	context.beginPath();
+	context.arc(_half-_eighth-eyeWidth, 10, eyeWidth, eyeHeight, 1 * Math.PI, true);
+	// restore to original state
+	context.restore();
+	// apply styling
+	context.fillStyle = 'black';
+	context.fill();
+	context.lineWidth = 1;
+	context.strokeStyle = 'black';
+	context.stroke();
+	
+	//right eye
+	context.save();
+	// translate context
+	context.translate(eyeWidth, eyeHeight);
+	// scale context horizontally
+	context.scale(1, 2);
+	// draw circle which will be stretched into an oval
+	context.beginPath();
+	context.arc(_half+_eighth, 10, eyeWidth, eyeHeight, 2 * Math.PI, false);
+	// restore to original state
+	context.restore();
+	// apply styling
+	context.fillStyle = 'black';
+	context.fill();
+	context.lineWidth = 1;
+	context.strokeStyle = 'black';
+	context.stroke();
+
+	// start angle is to the right of the center point. So to draw a
+	// semi-circle that's open at the top, like for the mouth in a 
+	// smile, you need to draw in a clockwise direction.
+	// angle is the number of degrees we take off the edges of the 
+	// semi circle to give a more realistic mouth look.
+	context.beginPath();
+	context.lineWidth=2;
+	context.moveTo(_quarter, 90);
+	context.bezierCurveTo(48, 0.5*120, 80, 0.5*120, 96, 90);
+	context.stroke();
+
+}
+
+function degreesToRadians(degrees) {
+	radians = (degrees * Math.PI)/180;
+	return radians;
+}
+
+</script>
+</head>
+<body>
+    <canvas width="128" height="128" id="smiley">
+		<p>You need canvas!</p>
+		<p>This example requires a browser that supports the
+		<a href="http://www.w3.org/html/wg/html5/">HTML5</a> 
+		&lt;canvas&gt; feature.</p>
+	</canvas>
+</body>
+</html>
